@@ -8,6 +8,47 @@
 import SwiftUI
 import ComposableArchitecture
 
+fileprivate let wolframAlphaApiKey = "QVXP3R-9VX4K8AGPQ"
+
+struct WolframAlphaResult: Decodable {
+    let queryResult: QueryResult
+    
+    struct QueryResult: Decodable {
+        let pods: [Pod]
+        
+        struct Pod: Decodable {
+            let primary: Bool?
+            let subPods: [SubPod]
+            
+            struct SubPod: Decodable {
+                let plainText: String
+            }
+        }
+    }
+}
+
+private func wolframAplha(query: String, callBack: @escaping (WolframAlphaResult?) -> Void) {
+    var components = URLComponents(string: "https://api.wolframalpha.com/v2/query")!
+    components.queryItems = [
+        URLQueryItem(name: "input", value: query),
+        URLQueryItem(name: "format", value: "plaintext"),
+        URLQueryItem(name: "output", value: "JSON"),
+        URLQueryItem(name: "appid", value: wolframAlphaApiKey),
+    ]
+    
+    URLSession.shared.dataTask(with: components.url(relativeTo: nil)!) { data, response, error in
+        callBack( data.flatMap { try? JSONDecoder().decode(WolframAlphaResult.self, from: $0) } )
+    }
+    .resume()
+}
+
+private func nthPrime(n: Int, callback: @escaping (Int?) -> Void) {
+    wolframAplha(query: "prime \(n)") { result in
+        callback( result.flatMap { $0.queryResult.pods.first {$0.primary == .some(true)}?.subPods.first?.plainText }.flatMap(Int.init) )
+    }
+}
+
+
 class AppState: ObservableObject {
     @Published var count: Int = .zero
     @Published var favoritePrimes: [Int] = []
@@ -23,7 +64,7 @@ struct ContentView: View {
                     Text("Counter demo")
                 }
                 
-                NavigationLink(destination: Color(.green)) {
+                NavigationLink(destination: FavoritePrimesView(state: appState)) {
                     Text("Favorite primes")
                 }
             }
@@ -35,6 +76,11 @@ struct ContentView: View {
 struct CounterView: View {
     @ObservedObject var state: AppState
     @State var isPresentationShown: Bool = false
+    
+    @State var prime: Int?
+    @State var nthPrime: Int = -1
+    @State var isNthPrimePresented: Bool = false
+    @State var fetching: Bool = false
     
     var ending: String {
         get {
@@ -69,14 +115,18 @@ struct CounterView: View {
                 }
             }
             
-            
             Button("Is this prime number?") {
                 isPresentationShown = true
             }
             
             Button("What is the \(state.count)\(ending) prime number") {
-                
+                fetching = true
+                TheComposableArchitecture.nthPrime(n: state.count) { n in
+                    nthPrime = n ?? -1
+                    isNthPrimePresented = true
+                }
             }
+            .disabled(fetching)
         }
         .font(.title)
         .navigationTitle("Counter Demo")
@@ -84,6 +134,12 @@ struct CounterView: View {
             isPresentationShown = false
         } content: {
             IsPrimeView(state: state)
+        }
+        .alert("Nth prime", isPresented: $isNthPrimePresented, presenting: nthPrime) { n in
+            Text("\(self.state.count)th prime number is \(n)")
+                .onDisappear {
+                    self.fetching = false
+                }
         }
 
     }
@@ -126,6 +182,15 @@ struct IsPrimeView: View {
         }
     }
     
+}
+
+struct FavoritePrimesView: View {
+    @ObservedObject var state: AppState
+    
+    var body: some View {
+        EmptyView()
+            .navigationTitle("Favorite primes")
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
