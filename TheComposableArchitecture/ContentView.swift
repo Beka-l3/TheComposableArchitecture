@@ -51,7 +51,12 @@ private func nthPrime(n: Int, callback: @escaping (Int?) -> Void) {
 
 class AppState: ObservableObject {
     @Published var count: Int = .zero
-    @Published var favoritePrimes: [Int] = []
+    @Published var favoritePrimes: [Prime] = []
+    
+    struct Prime {
+        let id: UUID = .init()
+        let prime: Int
+    }
 }
 
 struct ContentView: View {
@@ -77,7 +82,6 @@ struct CounterView: View {
     @ObservedObject var state: AppState
     @State var isPresentationShown: Bool = false
     
-    @State var prime: Int?
     @State var nthPrime: Int = -1
     @State var isNthPrimePresented: Bool = false
     @State var fetching: Bool = false
@@ -159,7 +163,7 @@ private func isPrime(_ num: Int) -> Bool {
 struct IsPrimeView: View {
     @ObservedObject var state: AppState
     var isInFavorites: Bool {
-        get { state.favoritePrimes.contains([state.count]) }
+        get { state.favoritePrimes.contains { $0.prime == state.count } }
     }
     
     var body: some View {
@@ -169,9 +173,9 @@ struct IsPrimeView: View {
                 
                 Button(isInFavorites ? "Remove from favorites" : "Add to favorites") {
                     if isInFavorites {
-                        state.favoritePrimes.removeAll { $0 == self.state.count }
+                        state.favoritePrimes.removeAll { $0.prime == self.state.count }
                     } else {
-                        state.favoritePrimes.append(state.count)
+                        state.favoritePrimes.append( .init(prime: state.count) )
                     }
                 }
             }
@@ -188,8 +192,17 @@ struct FavoritePrimesView: View {
     @ObservedObject var state: AppState
     
     var body: some View {
-        EmptyView()
-            .navigationTitle("Favorite primes")
+        List {
+            ForEach(state.favoritePrimes, id: \.id) { prime in
+                Text("\(prime.prime)")
+            }
+            .onDelete { indexSet in
+                for index in indexSet {
+                    self.state.favoritePrimes.remove(at: index)
+                }
+            }
+        }
+        .navigationTitle("Favorite primes")
     }
 }
 
