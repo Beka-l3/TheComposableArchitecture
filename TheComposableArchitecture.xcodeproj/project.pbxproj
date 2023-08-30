@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		07675FCD2A9E51670024E714 /* TheComposableArchitectureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07675FCC2A9E51670024E714 /* TheComposableArchitectureApp.swift */; };
-		07675FCF2A9E51670024E714 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07675FCE2A9E51670024E714 /* ContentView.swift */; };
+		07675FCF2A9E51670024E714 /* Introduction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07675FCE2A9E51670024E714 /* Introduction.swift */; };
 		07675FD12A9E516E0024E714 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07675FD02A9E516E0024E714 /* Assets.xcassets */; };
 		07675FD42A9E516E0024E714 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07675FD32A9E516E0024E714 /* Preview Assets.xcassets */; };
 		07675FDC2A9E51A30024E714 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 07675FDB2A9E51A30024E714 /* ComposableArchitecture */; };
@@ -17,7 +17,7 @@
 /* Begin PBXFileReference section */
 		07675FC92A9E51670024E714 /* TheComposableArchitecture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheComposableArchitecture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07675FCC2A9E51670024E714 /* TheComposableArchitectureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheComposableArchitectureApp.swift; sourceTree = "<group>"; };
-		07675FCE2A9E51670024E714 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		07675FCE2A9E51670024E714 /* Introduction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Introduction.swift; sourceTree = "<group>"; };
 		07675FD02A9E516E0024E714 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		07675FD32A9E516E0024E714 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -54,7 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				07675FCC2A9E51670024E714 /* TheComposableArchitectureApp.swift */,
-				07675FCE2A9E51670024E714 /* ContentView.swift */,
+				07675FCE2A9E51670024E714 /* Introduction.swift */,
 				07675FD02A9E516E0024E714 /* Assets.xcassets */,
 				07675FD22A9E516E0024E714 /* Preview Content */,
 			);
@@ -145,7 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				07675FCF2A9E51670024E714 /* ContentView.swift in Sources */,
+				07675FCF2A9E51670024E714 /* Introduction.swift in Sources */,
 				07675FCD2A9E51670024E714 /* TheComposableArchitectureApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
